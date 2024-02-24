@@ -58,7 +58,7 @@ public class ScannerEmulationServer {
 
                     // Process the received message
                     byte[] data = packet.getData();
-                    LOGGER.info("Broadcast-Message received {}", ByteTools.bytesToHexString(trimTrailingZeros(data)));
+                    LOGGER.info("Broadcast-Message received {}", ByteTools.bytesToHexString(ByteTools.trimTrailingZeros(data)));
 
                     // Prepare answer
                     byte[] replyData = createReply();
