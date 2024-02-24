@@ -15,6 +15,7 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -41,7 +42,7 @@ public class ScannerEmulationServer {
                     executor.submit(() -> handleConnection(socketChannel));
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.error("Exception in TCP Server", e);
             }
         }).start();
 
@@ -111,16 +112,13 @@ public class ScannerEmulationServer {
                     }
                 }
             }
-            if (ipAddress != null && macAddress != null) {
+            if (ipAddress != null) {
                 break;
             }
         }
 
-        if (ipAddress != null) {
-            buffer.put(ipAddress);
-        } else {
-            buffer.put(new byte[]{0, 0, 0, 0}); // Default if not IP address was found
-        }
+        // Default if not IP address was found
+        buffer.put(Objects.requireNonNullElseGet(ipAddress, () -> new byte[]{0, 0, 0, 0}));
         if (macAddress == null) {
             macAddress = new byte[]{0, 0, 0, 0, 0, 0}; // Default value if no MAC is found
         }
