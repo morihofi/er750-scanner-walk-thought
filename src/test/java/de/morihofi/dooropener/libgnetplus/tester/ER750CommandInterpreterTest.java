@@ -2,6 +2,7 @@ package de.morihofi.dooropener.libgnetplus.tester;
 
 import de.morihofi.dooropener.libgnetplus.ControlLedBuzzerOption;
 import de.morihofi.dooropener.libgnetplus.ER750Scanner;
+import de.morihofi.dooropener.libgnetplus.GnetQuery;
 import org.junit.jupiter.api.Assertions;
 
 class ER750CommandInterpreterTest {
@@ -24,5 +25,6 @@ class ER750CommandInterpreterTest {
     void interpretCommand() {
         Assertions.assertEquals(ER750CommandInterpreter.CMD_TYPE.COMMAND_OPEN_DOOR, ER750CommandInterpreter.interpretCommand(ER750Scanner.getOpenDoorCommand(7)));
         Assertions.assertEquals(ER750CommandInterpreter.CMD_TYPE.COMMAND_CONTROL_LED_OR_BUZZER, ER750CommandInterpreter.interpretCommand(ER750Scanner.getControlLedBuzzerCommand(ControlLedBuzzerOption.TURN_LED_OFF)));
+        Assertions.assertEquals(ER750CommandInterpreter.CMD_TYPE.COMMAND_GET_VERSION, ER750CommandInterpreter.interpretCommand(GnetQuery.getVersionQuery()));
     }
 }

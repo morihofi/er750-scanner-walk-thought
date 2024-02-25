@@ -118,7 +118,11 @@ public class ScannerEmulationServer {
         }
 
         // Default if not IP address was found
-        buffer.put(Objects.requireNonNullElseGet(ipAddress, () -> new byte[]{0, 0, 0, 0}));
+        if(ipAddress != null){
+            buffer.put(ipAddress);
+        }else {
+            buffer.put(new byte[]{0, 0, 0, 0});
+        }
         if (macAddress == null) {
             macAddress = new byte[]{0, 0, 0, 0, 0, 0}; // Default value if no MAC is found
         }
@@ -170,22 +174,22 @@ public class ScannerEmulationServer {
 
                 LOGGER.info("Processing command");
                 switch (ER750CommandInterpreter.interpretCommand(buffer.array())) {
-                    case COMMAND_OPEN_DOOR -> {
+                    case COMMAND_OPEN_DOOR:
                         LOGGER.info("Command is open door command with duration of {} seconds", ER750CommandInterpreter.extractDurationFromOpenDoorCommand(buffer.array()));
                         response = DoorOpener.Response.generateResponse(GnetCommandFormat.EGnetErrorCodes.SUCCESS, null);
-                    }
-                    case COMMAND_CONTROL_LED_OR_BUZZER -> {
+                        break;
+                    case COMMAND_CONTROL_LED_OR_BUZZER:
                         LOGGER.info("Command is LED/Buzzer command: {}", ER750CommandInterpreter.extractControlLedBuzzerOption(buffer.array()));
                         response = DoorOpener.Response.generateResponse(GnetCommandFormat.EGnetErrorCodes.SUCCESS, null);
-                    }
-                    case COMMAND_GET_VERSION -> {
+                        break;
+                    case COMMAND_GET_VERSION:
                         LOGGER.info("Command is Get Version, answering with a read-out version of a physical device");
                         response = DoorOpener.Response.generateResponse(GnetCommandFormat.EGnetErrorCodes.SUCCESS, "PGM-T1379 V1.1R1 (141125)".getBytes(StandardCharsets.US_ASCII));
-                    }
+                        break;
                 }
 
                 // Create an error message if it was hot handled
-                if(response == null){
+                if (response == null) {
                     LOGGER.error("Throwing error of unknown reason, cause command is not supported");
                     response = DoorOpener.Response.generateResponse(GnetCommandFormat.EGnetErrorCodes.FAILED_UNKNOWN_REASON, null);
                 }
@@ -200,11 +204,9 @@ public class ScannerEmulationServer {
             LOGGER.info("Closing connection");
             socketChannel.close(); // Close client connection
         } catch (IOException e) {
-           LOGGER.error("Error on client connection", e);
+            LOGGER.error("Error on client connection", e);
         }
     }
-
-
 
 
 }
