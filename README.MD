@@ -1,4 +1,6 @@
 # Scanner-Walk-Through - a GNetPlus Library for Java
+[![](https://jitpack.io/v/morihofi/er750-scanner-walk-thought.svg)](https://jitpack.io/#morihofi/er750-scanner-walk-thought)
+
 ## Overview
 
 The GNetPlus Library is a proof of concept (PoC) designed to facilitate the integration and manipulation of access control devices, 
